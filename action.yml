@@ -11,6 +11,9 @@ inputs:
   target-registry:
     description: 'Target registry to push the image to'
     required: true
+  bake-target:
+    description: 'Bake target'
+    required: true
   repository-username:
     description: 'Repository username'
     required: true
@@ -58,4 +61,4 @@ runs:
         pull: ${{ !env.ACT }}
         tags: ${{ inputs.target-registry }}/${{ github.actor }}/${{ inputs.package-name }}:${{ inputs.tag }}
         targets: 
-          ${{ inputs.package-name }}
+          ${{ inputs.bake-target }}
