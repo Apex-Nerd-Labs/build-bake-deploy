@@ -1,4 +1,8 @@
 name: 'Build and Bake Docker Image'
+author: 'APEX Nerd Labs'
+branding:
+  icon: 'cloud-lightning'
+  color: 'gray-dark'
 description: 'Build and bake a Docker image'
 inputs:
   tag:  # id of input
@@ -20,6 +24,7 @@ inputs:
   repository-password:
     description: 'Repository password'
     required: true
+    default: ${{ github.token }}
   source:
     description: 'Source directory to build the image from'
     required: true
@@ -31,6 +36,14 @@ inputs:
   files:
     description: 'Files to include in the image'
     required: true
+  no-cache:
+    description: 'No cache'
+    required: false
+    default: "false"
+outputs:
+  metadata:
+    description: 'Metadata about the build'
+    value: ${{ steps.build-report.outputs.build-report }}
 runs:
   using: "composite"
   steps:
@@ -54,11 +67,14 @@ runs:
       uses: docker/bake-action@v6
       with:
         source: ${{ inputs.source }}  
-        workDir: ${{ inputs.workDir }}
+        workdir: ${{ inputs.workDir }}
         files:
           "./docker-bake.hcl"
+        imageName: ${{ inputs.target-registry }}/${{ github.actor }}/${{ inputs.package-name }}
+        imageTag: ${{ inputs.tag }}
         push: ${{ !env.ACT }}
         pull: ${{ !env.ACT }}
-        tags: ${{ inputs.target-registry }}/${{ github.actor }}/${{ inputs.package-name }}:${{ inputs.tag }}
+        github-token: ${{ inputs.repository-password }}
+        no-cache: ${{ inputs.no-cache }}
         targets: 
           ${{ inputs.bake-target }}
