@@ -66,12 +66,12 @@ runs:
     - name: Build and Bake Docker Image
       uses: docker/bake-action@v6
       with:
+        no-cache: ${{ inputs.no-cache }}
         source: ${{ inputs.source }}  
         workdir: ${{ inputs.workDir }}
         files:
           "./docker-bake.hcl"
-        imageName: ${{ inputs.target-registry }}/${{ github.actor }}/${{ inputs.package-name }}
-        imageTag: ${{ inputs.tag }}
+        tag: ${{ inputs.target-registry }}/${{ github.actor }}/${{ inputs.package-name }}:${{ inputs.tag }}
         push: ${{ !env.ACT }}
         pull: ${{ !env.ACT }}
         github-token: ${{ inputs.repository-password }}
