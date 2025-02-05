@@ -75,6 +75,5 @@ runs:
         push: ${{ !env.ACT }}
         pull: ${{ !env.ACT }}
         github-token: ${{ inputs.repository-password }}
-        no-cache: ${{ inputs.no-cache }}
         targets: 
           ${{ inputs.bake-target }}
